@@ -18,7 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 
 // EASY & MEDIUM
@@ -36,10 +38,16 @@ public class CategoryServiceImplTest {
 
     @Test
     public void testGetCategoryById_isEmpty(){
-        Category category = Category.builder().id(1).name("букет").build();
-        Mockito.when(categoryRepository.findById(any())).thenReturn(Optional.empty());
+        Integer id = 1;
 
-        Assertions.assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategoryById(any()));
+        Mockito.when(categoryRepository.findById(id)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategoryById(id));
+
+        // HARD
+        // HARD
+        // HARD
+        verify(categoryRepository, atLeast(1)).findById(id);
     }
 
     @Test
@@ -63,6 +71,12 @@ public class CategoryServiceImplTest {
         //
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals("Свидание", result.get(1).getName());
+
+
+        // HARD
+        // HARD
+        // HARD
+        verify(mapper, times(2)).fromEntityToDto(any(Category.class));
     }
 
     @Test
@@ -82,6 +96,12 @@ public class CategoryServiceImplTest {
         //
         Assertions.assertEquals(1, result.getId());
         Assertions.assertEquals("Праздник", result.getName());
+
+
+        // HARD
+        // HARD
+        // HARD
+        verify(mapper, atLeastOnce()).fromEntityToDto(any(Category.class));
     }
 
     @Test
@@ -90,5 +110,10 @@ public class CategoryServiceImplTest {
         Mockito.when(categoryRepository.findById(any())).thenReturn(null);
 
         Assertions.assertThrows(NullPointerException.class, () -> categoryService.getCategoryById(any()));
+
+        // HARD
+        // HARD
+        // HARD
+        verify(categoryRepository).findById(any());
     }
 }
